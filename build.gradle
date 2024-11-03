@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'org.example'
+group = 'com.github.beothorn'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -20,9 +20,9 @@ test {
 
 jar {
     manifest {
-        attributes "Main-Class": "org.example.JavaAgent"
-        attributes "Agent-Class": "org.example.JavaAgent"
-        attributes "Premain-Class": "org.example.JavaAgent"
+        attributes "Main-Class": "com.github.beothorn.Agent"
+        attributes "Agent-Class": "com.github.beothorn.Agent"
+        attributes "Premain-Class": "com.github.beothorn.Agent"
         attributes "Can-Redefine-Classes" : "true"
         attributes "Can-Retransform-Classes" : "true"
     }
