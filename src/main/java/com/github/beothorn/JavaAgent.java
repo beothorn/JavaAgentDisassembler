@@ -1,14 +1,34 @@
-package org.example;
+package com.github.beothorn;
 
+import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 
 public class JavaAgent {
+
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Usage: java -jar javaAgentDisassembler.jar <class_file_path>");
+            System.out.println("Usage: java -javaagent:javaAgentDisassembler.jar=MyClass -jar app.jar");
+            return;
+        }
+
+        String filePath = args[0];
+        try {
+            byte[] fileData = Files.readAllBytes(Path.of(filePath));
+            ByteCodeReader byteCodeReader = new ByteCodeReader(fileData);
+            System.out.println(byteCodeReader);
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
+    }
 
     public static void premain(
         String agentArgs,
@@ -23,7 +43,7 @@ public class JavaAgent {
                     ProtectionDomain protectionDomain,
                     byte[] classfileBuffer
             ){
-                if("com/example/Main".equals(className)){
+                if(className.contains(agentArgs)){
                     try {
                         ByteCodeReader byteCodeReader = new ByteCodeReader(classfileBuffer);
                         System.out.println(byteCodeReader);
